@@ -363,6 +363,11 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-impl \
     android.hardware.wifi@1.0-service
 
+# Add my own packages
+PRODUCT_PACKAGES += \
+    Adguard \
+    WhatIsMyIp
+
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/wifi/cred.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/cred.conf \
     $(COMMON_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
