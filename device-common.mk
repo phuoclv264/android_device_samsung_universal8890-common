@@ -23,8 +23,8 @@ PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
     device/samsung/universal8890-common/overlay/lineage-sdk \
     device/samsung/universal8890-common/overlay/packages/apps/Snap \
     device/samsung/universal8890-common/overlay/frameworks/base/packages/SystemUI \
-    device/samsung/universal8890-common/overlay/packages/apps/Bluetooth 
-    #device/samsung/universal8890-common/overlay/hardware/samsung/AdvancedDisplay
+    device/samsung/universal8890-common/overlay/packages/apps/Bluetooth \
+    device/samsung/universal8890-common/overlay/hardware/samsung/AdvancedDisplay
 
 # Boot animation
 TARGET_BOOTANIMATION_PRELOAD := true
@@ -44,8 +44,8 @@ PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
 PRODUCT_AAPT_PREBUILT_DPI := xxxhdpi xxhdpi xhdpi hdpi
 
 # AdvancedDisplay (MDNIE)
-#PRODUCT_PACKAGES += \
-#    AdvancedDisplay 
+PRODUCT_PACKAGES += \
+    AdvancedDisplay 
 
 # Additional native libraries
 PRODUCT_COPY_FILES += \
@@ -183,8 +183,8 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service.samsung
 
 # Livedisplay
-# PRODUCT_PACKAGES += \
-#     vendor.lineage.livedisplay@2.0-service.samsung-exynos
+PRODUCT_PACKAGES += \
+    vendor.lineage.livedisplay@2.0-service.samsung-exynos
 
 # Media
 PRODUCT_COPY_FILES += \
