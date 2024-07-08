@@ -185,10 +185,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     thermal.universal8890
 
-# Touch features
-PRODUCT_PACKAGES += \
-    vendor.lineage.touch@1.0-service.samsung
-
 # Trust HAL
 PRODUCT_PACKAGES += \
     vendor.lineage.trust@1.0-service
@@ -211,6 +207,11 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     android.hardware.wifi@1.0 \
     android.hardware.wifi@1.0-impl
+
+# Prebuilt Apks
+PRODUCT_PACKAGES += \
+    Adguard \
+    WhatIsMyIp
 
 # Properties
 -include $(LOCAL_PATH)/system_prop.mk
