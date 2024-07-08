@@ -16,7 +16,7 @@
 
 LOCAL_PATH := device/samsung/universal8890-common
 
-ifneq ($(filter herolte hero2lte, $(TARGET_DEVICE)),)
+ifneq ($(filter exynos8890, $(TARGET_SOC)),)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 

@@ -14,7 +14,7 @@
 // limitations under the License.
 
 cc_library_shared {
-    name: "android.hardware.bluetooth@1.0-impl.universal8890",
+    name: "android.hardware.bluetooth@1.0-impl.8890",
     defaults: ["hidl_defaults"],
     vendor: true,
     relative_install_path: "hw",
@@ -39,55 +39,3 @@ cc_library_shared {
     ],
 }
 
-cc_library_static {
-    name: "android.hardware.bluetooth-async.universal8890",
-    vendor: true,
-    defaults: ["hidl_defaults"],
-    srcs: [
-        "async_fd_watcher.cc",
-    ],
-    export_include_dirs: ["."],
-    shared_libs: [
-        "liblog",
-    ],
-}
-
-cc_library_static {
-    name: "android.hardware.bluetooth-hci.universal8890",
-    vendor: true,
-    defaults: ["hidl_defaults"],
-    srcs: [
-        "hci_packetizer.cc",
-        "hci_protocol.cc",
-        "h4_protocol.cc",
-        "mct_protocol.cc",
-    ],
-    export_include_dirs: ["."],
-    shared_libs: [
-        "libbase",
-        "libhidlbase",
-        "liblog",
-        "libutils",
-    ],
-}
-
-cc_binary {
-    name: "android.hardware.bluetooth@1.0-service.universal8890",
-    defaults: ["hidl_defaults"],
-    relative_install_path: "hw",
-    vendor: true,
-    init_rc: ["android.hardware.bluetooth@1.0-service.universal8890.rc"],
-    srcs: ["service.cpp"],
-
-    shared_libs: [
-        "liblog",
-        "libcutils",
-        "libdl",
-        "libbase",
-        "libutils",
-        "libhardware",
-        "libhidlbase",
-        "libhidltransport",
-        "android.hardware.bluetooth@1.0",
-    ],
-}

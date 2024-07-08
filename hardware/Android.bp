@@ -1,5 +1,4 @@
 subdirs = [
-    "atrace",
     "bluetooth",
     "camera",
 ]

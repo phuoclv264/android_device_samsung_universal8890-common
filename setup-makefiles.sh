@@ -36,10 +36,20 @@ fi
 setup_vendor "$DEVICE_COMMON" "$VENDOR" "$LINEAGE_ROOT" true
 
 # Copyright headers and guards
-write_headers "herolte hero2lte"
+write_headers "universal8890-common"
 
 # The standard blobs
 write_makefiles "$MY_DIR"/proprietary-files.txt true
+# The BSP blobs - we put a conditional in case the BSP
+# is actually being built
+printf '\n%s\n' 'ifeq ($(WITH_EXYNOS_BSP),)' >> "$PRODUCTMK"
+printf '\n%s\n' 'ifeq ($(WITH_EXYNOS_BSP),)' >> "$ANDROIDMK"
+
+write_makefiles "$MY_DIR"/proprietary-files-bsp.txt
+
+printf '%s\n' 'endif' >> "$PRODUCTMK"
+printf '%s\n' 'endif' >> "$ANDROIDMK"
+
 
 ###################################################################################################
 # CUSTOM PART START                                                                               #
@@ -47,41 +57,37 @@ write_makefiles "$MY_DIR"/proprietary-files.txt true
 OUTDIR=vendor/$VENDOR/$DEVICE_COMMON
 (cat << EOF) >> $LINEAGE_ROOT/$OUTDIR/Android.mk
 include \$(CLEAR_VARS)
+LOCAL_MODULE := libGLES_mali
+LOCAL_MODULE_OWNER := samsung
+LOCAL_SRC_FILES := proprietary/vendor/lib/egl/libGLES_mali.so
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_PATH := \$(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/egl
 
-EGL_LIBS := libOpenCL.so libOpenCL.so.1 libOpenCL.so.1.1
+SYMLINKS := \$(TARGET_OUT)/vendor
+\$(SYMLINKS):
+	@echo "Symlink: vulkan.exynos5.so"
+	@mkdir -p \$@/lib/hw
+	\$(hide) ln -sf ../egl/libGLES_mali.so \$@/lib/hw/vulkan.exynos5.so
+	@echo "Symlink: libOpenCL.so"
+	\$(hide) ln -sf egl/libGLES_mali.so \$@/lib/libOpenCL.so
+	@echo "Symlink: libOpenCL.so.1"
+	\$(hide) ln -sf egl/libGLES_mali.so \$@/lib/libOpenCL.so.1
+	@echo "Symlink: libOpenCL.so.1.1"
+	\$(hide) ln -sf egl/libGLES_mali.so \$@/lib/libOpenCL.so.1.1
 
-EGL_32_SYMLINKS := \$(addprefix \$(TARGET_OUT_VENDOR)/lib/,\$(EGL_LIBS))
-\$(EGL_32_SYMLINKS): \$(LOCAL_INSTALLED_MODULE)
-	@echo "Symlink: EGL 32-bit lib: \$@"
-	@mkdir -p \$(dir \$@)
-	@rm -rf \$@
-	\$(hide) ln -sf /vendor/lib/egl/libGLES_mali.so \$@
+ALL_MODULES.\$(LOCAL_MODULE).INSTALLED := \\
+	\$(ALL_MODULES.\$(LOCAL_MODULE).INSTALLED) \$(SYMLINKS)
 
-EGL_64_SYMLINKS := \$(addprefix \$(TARGET_OUT_VENDOR)/lib64/,\$(EGL_LIBS))
-\$(EGL_64_SYMLINKS): \$(LOCAL_INSTALLED_MODULE)
-	@echo "Symlink: EGL 64-bit lib : \$@"
-	@mkdir -p \$(dir \$@)
-	@rm -rf \$@
-	\$(hide) ln -sf /vendor/lib64/egl/libGLES_mali.so \$@
+include \$(BUILD_PREBUILT)
 
-VULKAN_LIBS := vulkan.exynos5.so
+EOF
 
-VULKAN_32_SYMLINKS := \$(addprefix \$(TARGET_OUT_VENDOR)/lib/hw/,\$(VULKAN_LIBS))
-\$(VULKAN_32_SYMLINKS): \$(LOCAL_INSTALLED_MODULE)
-	@echo "Copy: Vulkan 32-bit lib: \$@"
-	@mkdir -p \$(dir \$@)
-	@rm -rf \$@
-	\$(hide) cp \$(TARGET_OUT_VENDOR)/lib/egl/libGLES_mali.so \$@
+(cat << EOF) >> $LINEAGE_ROOT/$OUTDIR/$DEVICE_COMMON-vendor.mk
 
-VULKAN_64_SYMLINKS := \$(addprefix \$(TARGET_OUT_VENDOR)/lib64/hw/,\$(VULKAN_LIBS))
-\$(VULKAN_64_SYMLINKS): \$(LOCAL_INSTALLED_MODULE)
-	@echo "Copy: Vulkan 64-bit lib: \$@"
-	@mkdir -p \$(dir \$@)
-	@rm -rf \$@
-	\$(hide) cp \$(TARGET_OUT_VENDOR)/lib64/egl/libGLES_mali.so \$@
-
-ALL_DEFAULT_INSTALLED_MODULES += \$(EGL_32_SYMLINKS) \$(EGL_64_SYMLINKS) \$(VULKAN_32_SYMLINKS) \$(VULKAN_64_SYMLINKS)
-
+# Create Mali links for Vulkan and OpenCL
+PRODUCT_PACKAGES += libGLES_mali
 EOF
 ###################################################################################################
 # CUSTOM PART END                                                                                 #

@@ -1,3 +1,0 @@
-allow bootanim debugfs_ion:dir search;
-allow bootanim debugfs_mali:dir search;
-

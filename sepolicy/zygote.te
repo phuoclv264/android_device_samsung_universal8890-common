@@ -1,1 +1,1 @@
-dontaudit zygote proc_cmdline:file read;
+allow zygote self:capability sys_nice;
